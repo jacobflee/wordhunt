@@ -1,5 +1,5 @@
 /* eslint-disable eqeqeq */
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useState, memo } from 'react';
 // import { isMobile } from 'react-device-detect';
 import Header from './Header';
 import InfoGame from './InfoGame';
@@ -7,10 +7,10 @@ import Grid from './Grid';
 import InfoResult from './InfoResult';
 
 function App() {
+  console.log('app');
   const scores = [100, 400, 800, 1400, 2200, 3200, 4800, 7200, 10400, 15200, 21600, 28800, 40000, 100000];
   const [score, setScore] = useState(0);
-  const randomBoxes = generateRandomBoxes();
-  const [boxes, setBoxes] = useState(randomBoxes);
+  const [boxes, setBoxes] = useState(generateRandomBoxes());
   const [wordsFound, setWordsFound] = useState([]);
   const [prevId, setPrevId] = useState(-1);
   const [curWord, setCurWord] = useState('');
@@ -28,7 +28,7 @@ function App() {
       randomBoxes.push({
         isPressed: false,
         value: String.fromCharCode(Math.floor(26 * Math.random() + 65)),
-        shouldUpdate: true
+        shouldUpdate: false
       });
     return randomBoxes;
   }
@@ -70,11 +70,10 @@ function App() {
       setWordsFound(wordsFound => [...wordsFound, curWord]);
       setScore(score => score + scores[curWord.length - 3]);
     }
-    setBoxes(boxes => boxes.map((box) => ({
-      isPressed: false,
-      value: box.value,
-      shouldUpdate: true
-    })));
+    setBoxes(boxes => boxes.map((box) => {
+      return { isPressed: false, value: box.value, shouldUpdate: false };
+    }));
+    // setBoxes(defaultBoxes);
     setCurWord('');
     setPrevId(-1);
   }
@@ -92,7 +91,7 @@ function App() {
       <br />
       <InfoGame score={score} curWord={curWord} />
       <br />
-      <Grid boxes={boxes} handleTouch={handleTouch} />
+      <Grid boxes={boxes} prevId={prevId} handleTouch={handleTouch} />
       <br />
       <InfoResult wordsFound={wordsFound} />
     </div>

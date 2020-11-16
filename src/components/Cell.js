@@ -2,18 +2,20 @@ import { memo } from 'react';
 
 function Cell(props) {
     const { id, box, handleTouch } = props;
-    console.log(id);
+    // if (props.prevId !== -1)
+        // console.log(id, box);
+        // console.log(id);
 
     return (
-        <div
-            className='cell'
-            // button pressed
-            style={{
-                borderColor: box.isPressed && 'blue',
-                color: box.isPressed && 'blue'
-            }}
-        >
-
+        <div className='cell-container'>
+            <div
+                className='cell'
+                // button pressed
+                style={{
+                    borderColor: box.isPressed && 'blue',
+                    color: box.isPressed && 'blue'
+                }}
+            />
             {/* dot */}
             {box.isPressed &&
                 <img
@@ -55,6 +57,9 @@ function Cell(props) {
     );
 }
 
-export default memo(Cell, (prevProps, nextProps) => {
-    return !(nextProps.box.shouldUpdate);
-});
+export default Cell;
+// export default memo(Cell, () => true);
+// export default memo(Cell, (prevProps, nextProps) => {
+//     console.log(nextProps.box.shouldUpdate);
+//     return !(nextProps.prevId === -1 || (nextProps.box.shouldUpdate));
+// });
